@@ -52,22 +52,32 @@
 			}
 			return matrix;
 		}
-
 		/// <summary> Scalar product </summary>
-		public static double Dot(Vector vec1, Vector vec2)
+		public static double Dot(Vector v1, Vector v2)
 		{
-			if (vec1.Dimensions != vec2.Dimensions)
+			if (v1 != v2)
 				throw new Exception("Вектора не одинаковы");
 
 			double scalar = 0;
-			for (int i = 0; i < vec1.Dimensions; i++)
-				scalar += vec1[i] + vec2[i];
+			for (int index = 0; index < v1.Dimensions; index++)
+				scalar += v1[index] * v2[index];
 
 			return scalar;
 		}
+
+		public static Vector operator +(Vector v1, Vector v2)
+		{
+			if (v1 != v2)
+				throw new Exception("Сложение векторов невозможно");
+
+			for (int index = 0; index < v1.Dimensions; index++)
+				v1[index] += v2[index];
+
+			return v1;
+		}
 		public static Vector operator -(Vector v1, Vector v2)
 		{
-			if (v1.Dimensions != v2.Dimensions)
+			if (v1 != v2)
 				throw new Exception("Вычитание векторов невозможно");
 
 			for (int index = 0; index < v1.Dimensions; index++)
@@ -75,13 +85,30 @@
 
 			return v1;
 		}
-		public static Vector operator *(double number, Vector vector)
+		public static Vector operator *(Vector vector, double value)
 		{
 			for (int index = 0; index < vector.Dimensions; index++)
-				vector[index] *= number;
+				vector[index] *= value;
 
 			return vector;
 		}
+		public static Vector operator *(double value, Vector vector) =>
+			vector * value;
+		public static Vector operator /(Vector vector, double value)
+		{
+			for (int index = 0; index < vector.Dimensions; index++)
+				vector[index] /= value;
+
+			return vector;
+		}
+		public static bool operator ==(Vector v1, Vector v2) =>
+			v1.Dimensions == v2.Dimensions;
+		public static bool operator !=(Vector v1, Vector v2) =>
+			v1.Dimensions != v2.Dimensions;
+		public static implicit operator Vector(double[] vector) =>
+			new Vector(vector);
+		public static explicit operator double[](Vector vector) =>
+			vector._vector;
 
 		internal enum Orientation
 		{

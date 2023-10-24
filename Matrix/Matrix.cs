@@ -74,6 +74,18 @@
 				vector[column] = _matrix[row - 1, column];
 			return vector;
 		}
+		public double[] GetMainDiagonal()
+		{
+			if (IsSquare() == false)
+				throw new Exception("Матрица не квадратная");
+
+			int mainSize = Rows; // or Columns
+			double[] mainElements = new double[mainSize];
+			for (int index = 0; index < mainSize; index++)
+				mainElements[index] = this[index, index];
+
+			return mainElements;
+		}
 		public double GetMinor() =>
 			IsSquare(2) ?
 			this[0, 0] * this[1, 1] - this[0, 1] * this[1, 0] :
@@ -182,6 +194,8 @@
 
 			return matrix;
 		}
+		public static Matrix operator *(double value, Matrix m) =>
+			m * value;
 		public static Matrix operator /(Matrix m, double value)
 		{
 			Matrix matrix = (Matrix)m.Clone();
