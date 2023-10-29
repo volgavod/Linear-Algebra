@@ -1,6 +1,6 @@
 ﻿namespace LinearAlgebra
 {
-	static class LAPrinter
+	static class LAConsole
 	{
 		public static void Write(Matrix matrix, int? round = 6)
 		{

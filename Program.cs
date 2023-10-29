@@ -37,6 +37,7 @@ static class Zadanie
 		{ 0.66, 0.44, 0.22, 1.00 }
 	};
 
+
 	public static void _121g_1()
 	{
 		AugmentedMatrix M = new AugmentedMatrix(A1, F);
@@ -45,15 +46,15 @@ static class Zadanie
 
 		Console.WriteLine("Матрица M");
 		double[,] apprM = LAMath.IterativeMethod(M, 14);
-		PrintApproximations(apprM);
+		PrintResult(apprM);
 
 		Console.WriteLine("\nМатрица H");
 		double[,] apprH = LAMath.IterativeMethod(H, 13);
-		PrintApproximations(apprH);
+		PrintResult(apprH);
 
 		Console.WriteLine("\nМатрица A");
 		double[,] apprA = LAMath.IterativeMethod(A);
-		PrintApproximations(apprA);
+		PrintResult(apprA);
 	}
 	public static void _119b()
 	{
@@ -62,34 +63,34 @@ static class Zadanie
 
 		Matrix Q = LAMath.GramSchmidtOrthogonalization(A);
 		Console.WriteLine("Ортогонализированная матрица:");
-		LAPrinter.Write(Q);
+		LAConsole.Write(Q);
 
 		Matrix X = LAMath.SolveMatrixEquationAXB(Q, E);
 		Console.WriteLine("\nРезультат:");
-		LAPrinter.Write(X);
+		LAConsole.Write(X);
 
 		Matrix R = LAMath.CalcResidualsMatrix(E, Q, X);
 		Console.WriteLine("\nМатрица невязки: ");
-		LAPrinter.Write(R, null);
+		LAConsole.Write(R, null);
 	}
 	public static void _115a()
 	{
 		Matrix A = A3;
 		Vector f = F;
 		Console.WriteLine("Исходные данные:");
-		LAPrinter.Write(A);
-		LAPrinter.Write(f, Vector.Orientation.Vertical);
+		LAConsole.Write(A);
+		LAConsole.Write(f, Vector.Orientation.Vertical);
 
 		(Matrix, Vector) ex = LAMath.GaussJordanElimination(A, f);
 		Matrix E = ex.Item1;
 		Vector x = ex.Item2;
 		Console.WriteLine("\nРезультат:");
-		LAPrinter.Write(E);
-		LAPrinter.Write(x, Vector.Orientation.Vertical);
+		LAConsole.Write(E);
+		LAConsole.Write(x, Vector.Orientation.Vertical);
 
 		Vector res = LAMath.CalcResidualsVector(A, f, x);
 		Console.WriteLine("\nВектор невязки:");
-		LAPrinter.Write(res);
+		LAConsole.Write(res);
 		Console.WriteLine("\nЕго норма:\n" + res.Norm);
 	}
 	public static void Test()
@@ -113,14 +114,20 @@ static class Zadanie
 					Console.Write(string.Format("{0:F6}\t", Math.Round(approximations[i, j], 6)));
 			}
 			Console.WriteLine();
-			if (i == length0 - 1)
-			{
-				Console.WriteLine();
-				for (int j = 0; j < length1 / 2; j++)
-					Console.WriteLine($"X{j + 1}: {string.Format("{0:F6}", approximations[length0 - 1, j])}  " +
-								  $"Погрешность: {string.Format("{0:F6}", approximations[length0 - 1, j + length1 / 2])}" );
-			}
 		}
-
+		Console.WriteLine();
+		for (int j = 0; j < length1 / 2; j++)
+			Console.WriteLine($"X{j + 1}: {string.Format("{0:F6}", approximations[length0 - 1, j])}  " +
+						  $"Погрешность: {string.Format("{0:F6}", approximations[length0 - 1, j + length1 / 2])}");
 	}
+	public static void PrintResult(double[,] approximations)
+	{
+		int length0 = approximations.GetLength(0);
+		int length1 = approximations.GetLength(1);
+		for (int j = 0; j < length1 / 2; j++)
+			Console.WriteLine($"X{j + 1}: {string.Format("{0:F6}", approximations[length0 - 1, j])}  " +
+						  $"Погрешность: {string.Format("{0:F6}", approximations[length0 - 1, j + length1 / 2])}");
+        Console.WriteLine("Точность: 0,001");
+        Console.WriteLine("Количество шагов: " + length0);
+    }
 }

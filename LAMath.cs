@@ -117,5 +117,50 @@
 
 			return approximations;
 		}
+		public static double[] SteepestDescentMethod(AugmentedMatrix aMatrix)
+		{
+			Vector vector = new Vector(aMatrix.Rows);
+			for (int i = 0; i < vector.Dimensions; i++)
+				vector[i] = aMatrix[i];
+			AugmentedMatrix augMatrix = new AugmentedMatrix(aMatrix, vector);
+			int mainSize = augMatrix.Rows;
+			double[] main = new double[mainSize];
+			for (int index = 0; index < mainSize; index++)
+				main[index] = augMatrix[index, index];
+			double[,] appr = new double[16, main.Length * 2];
+			for (int row = 0; row < aMatrix.Rows; row++)
+			{
+				for (int column = 0; column < aMatrix.Columns; column++)
+					augMatrix[row, column] /= main[row];
+
+				augMatrix[row] /= main[row];
+			}
+			for (int index = 0; index < main.Length; index++)
+				appr[0, index] = augMatrix[index];
+			for (int index = 1; index < 16; index++)
+			{
+				for (int r = 0; r < augMatrix.Rows; r++)
+				{
+					appr[index, r] += augMatrix[r];
+					for (int col = 0; col < augMatrix.Columns; col++)
+					{
+						if (r == col)
+						{
+							continue;
+						}
+						appr[index, r] -= augMatrix[r, col] * appr[index - 1, col];
+					}
+					double xNow = appr[index, r];
+					double xBefore = appr[index - 1, r];
+					appr[index, r + main.Length] = Math.Abs(appr[index, r]) - Math.Abs(appr[index - 1, r]);
+				}
+			}
+			double[] output = new double[main.Length];
+			for (int i = 0; i < output.Length; i++)
+			{
+				output[i] = appr[appr.GetLength(0) - 1, i];
+			}
+			return output;
+		}
 	}
 }

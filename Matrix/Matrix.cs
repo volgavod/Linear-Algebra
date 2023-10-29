@@ -97,6 +97,16 @@
 			Rows == Columns;
 		public bool IsSquare(int size) =>
 			Rows == size && Columns == size;
+		public bool IsSymmetry()
+		{
+			if (IsSquare() == false)
+				return false;
+			for (int row = 0; row < Rows - 1; row++)
+				for (int column = row + 1; column < Columns; column++)
+					if (this[row, column] != this[column, row])
+						return false;
+			return true;
+		}
 		public Matrix RemoveColumn(int column)
 		{
 			Vector[] vectors = new Vector[Columns - 1];
